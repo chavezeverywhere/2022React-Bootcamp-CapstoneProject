@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import ProductGrid from "../../Components/ProductGrid";
 import Pagination from "../../Components/Pagination";
 import ProductCategories from "../../MocData/product-categories.json";
@@ -11,28 +11,38 @@ const ProductList = () => {
   //Local store of the Products
   const originalFilteredProducts = Products;
 
-  const possibleCategories = [];
+  /**let possibleCategories = [];
   ProductCategories.results.map((result) => {
-    possibleCategories.push({
-      id: result.id,
-      active: false,
-    });
-  });
+    possibleCategories = { ...possibleCategories, [result.id]: false };
+  });*/
 
   //Saving the last state of the products
   const [filteredProducts, setFilteredProducts] = useState(
     originalFilteredProducts.results
   );
 
-  const [categoryStatus, setCategoryStatus] = useState(possibleCategories);
-
-  const updateCategory = (id) => {
-    const objIndex = categoryStatus.findIndex((object) => {
-      return object.id === id;
+  const initialPossibleCategories = useMemo(() => {
+    let possibleCategories = [];
+    ProductCategories.results.map((result) => {
+      possibleCategories = { ...possibleCategories, [result.id]: false };
     });
-    categoryStatus[objIndex].active = !categoryStatus[objIndex].active;
-    setCategoryStatus(categoryStatus);
-  };
+    return possibleCategories;
+  }, []);
+
+  console.log("Original", initialPossibleCategories);
+
+  const [categoryStatus, setCategoryStatus] = useState(
+    initialPossibleCategories
+  );
+
+  const updateCategory = useCallback(
+    (id) => {
+      categoryStatus[id] = !categoryStatus[id];
+      setCategoryStatus(categoryStatus);
+      console.log("CatStatus", categoryStatus);
+    },
+    [categoryStatus]
+  );
 
   //This function filters the products that are shown
   const filteringProducts = (id) => {
