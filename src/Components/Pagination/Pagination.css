@@ -1,0 +1,9 @@
+.pagination-container {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-container li {
+  list-style-type: none;
+  border: solid 1px red;
+}
