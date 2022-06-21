@@ -3,21 +3,22 @@ import React from "react";
 import "./ProductGrid.css";
 import ProductCard from "./ProductCard/ProductCard";
 
-const ProductGrid = ({products}) => {
+const ProductGrid = ({ products }) => {
   return (
-    <div className="productGrid">
-    {
-        products.map((product)=>{
+    <>
+      <div className="productGrid">
+        {products.map((product) => {
           return (
-          <ProductCard 
-            proImage={product.data.images[0].image} 
-            proName={product.data.name} 
-            proCategory ={product.data.category.slug} 
-            proPrice= {product.data.price}/>
-          )
-        })
-      }
-    </div>
+            <ProductCard
+              proImage={product.data.images[0].image}
+              proName={product.data.name}
+              proCategory={product.data.category.slug}
+              proPrice={product.data.price}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 };
 
