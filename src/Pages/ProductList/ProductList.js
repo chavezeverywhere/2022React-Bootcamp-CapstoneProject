@@ -15,7 +15,7 @@ const ProductList = () => {
 
   const productsAPI = useProducts(16);
   const productCategoriesData = useProductCategories();
-  const originalFilteredProducts = productsAPI.data;
+  //const originalFilteredProducts = productsAPI.data;
 
   useEffect(() => {
     console.log(
