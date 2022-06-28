@@ -1,70 +1,46 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import ProductGrid from "../../Components/ProductGrid";
 import Pagination from "../../Components/Pagination";
-import ProductCategories from "../../MocData/product-categories.json";
-//For the product grid ../../../mocks/en-us/featured-products.json
-import Products from "../../MocData/products.json";
+
 import FilterColumn from "../../Components/FilterColumn";
+import Loading from "../../Components/Loading/Loading";
+
+import { useProducts } from "../../API/Hooks/useProducts";
+import { useProductCategories } from "../../API/Hooks/useProductCategories";
 import "./ProductList.css";
 
 const ProductList = () => {
-  //Local store of the Products
-  const originalFilteredProducts = Products;
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  /**let possibleCategories = [];
-  ProductCategories.results.map((result) => {
-    possibleCategories = { ...possibleCategories, [result.id]: false };
-  });*/
+  const productsAPI = useProducts(16);
+  const productCategoriesData = useProductCategories();
+  const originalFilteredProducts = productsAPI.data;
 
-  //Saving the last state of the products
-  const [filteredProducts, setFilteredProducts] = useState(
-    originalFilteredProducts.results
-  );
-
-  const initialPossibleCategories = useMemo(() => {
-    let possibleCategories = [];
-    ProductCategories.results.map((result) => {
-      possibleCategories = { ...possibleCategories, [result.id]: false };
-    });
-    return possibleCategories;
-  }, []);
-
-  console.log("Original", initialPossibleCategories);
-
-  const [categoryStatus, setCategoryStatus] = useState(
-    initialPossibleCategories
-  );
-
-  const updateCategory = useCallback(
-    (id) => {
-      categoryStatus[id] = !categoryStatus[id];
-      setCategoryStatus(categoryStatus);
-      console.log("CatStatus", categoryStatus);
-    },
-    [categoryStatus]
-  );
-
-  //This function filters the products that are shown
-  const filteringProducts = (id) => {
-    const fProducts = originalFilteredProducts.results.filter((product) =>
-      product.data.category.id.includes(id)
+  useEffect(() => {
+    console.log(
+      "Fernando este es el nuevo param",
+      searchParams.get("category")
     );
-    updateCategory(id);
-    setFilteredProducts(fProducts);
-  };
+  }, [searchParams]);
 
   return (
     <>
       <h1>This is the Product List Page</h1>
       <div className="productList">
         <div className="filterWrapper">
-          <FilterColumn
-            categories={ProductCategories.results}
-            filteringFunc={filteringProducts}
-          />
+          {productCategoriesData.isLoading ? (
+            <Loading />
+          ) : (
+            <FilterColumn categories={productCategoriesData.data.results} />
+          )}
         </div>
         <div className="productGridWrapper">
-          <ProductGrid products={filteredProducts} />
+          {productsAPI.isLoading ? (
+            <Loading />
+          ) : (
+            <ProductGrid products={productsAPI.data.results} />
+          )}
         </div>
       </div>
       <Pagination />

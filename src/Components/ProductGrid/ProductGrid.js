@@ -14,6 +14,7 @@ const ProductGrid = ({ products }) => {
               proName={product.data.name}
               proCategory={product.data.category.slug}
               proPrice={product.data.price}
+              key={product.id}
             />
           );
         })}
