@@ -2,14 +2,12 @@ import React from "react";
 import FilterCategory from "./FilterCategory/FilterCategory";
 import "./FilterColumn.css";
 
-const FilterColumn = ({ categories, filteringFunc }) => {
+const FilterColumn = ({ categories }) => {
   return (
     <>
       <div className="productGrid">
         {categories.map((category) => {
-          return (
-            <FilterCategory category={category} filteringFunc={filteringFunc} />
-          );
+          return <FilterCategory category={category} />;
         })}
       </div>
     </>

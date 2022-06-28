@@ -4,31 +4,21 @@ import { useFeaturedBanners } from "./utils/hooks/useFeaturedBanners";
 import NavBar from "./Components/NavBar";
 import Footer from "./Components/Footer";
 import { Home, Cart, ProductList } from "./Pages";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
-  //const { data, isLoading } = useFeaturedBanners();
-  //console.log(data, isLoading);
-
-  let pageComponent;
-
-  switch (window.location.pathname) {
-    case "/":
-      pageComponent = <Home />;
-      break;
-    case "/productlist":
-      pageComponent = <ProductList />;
-      break;
-    case "/cart":
-      pageComponent = <Cart />;
-      break;
-    default:
-      break;
-  }
-
   return (
     <div className="App">
       <NavBar />
-      <div className="main">{pageComponent}</div>
+      <div className="main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/productlist/?category" element={<ProductList />} />
+          <Route path="/productlist" element={<ProductList />} />
+          <Route path="/cart" element={<Cart />} />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );
